@@ -3,3 +3,6 @@ kali
 localhost
 
 [debian:vars]
+
+
+#ansible --list-hosts all
