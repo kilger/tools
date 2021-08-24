@@ -1,0 +1,48 @@
+---
+- name: Test commands
+  hosts: localhost
+  connection: local
+  become: true
+#  gather_facts: true
+  tasks:
+#    - name: Test local action
+#      command: echo "hello world"
+
+    - name: Install Your Favorite Hacking Tools
+      apt:
+       state: present
+#       update_cache: true
+       pkg:
+        - docker.io
+        - docker-compose
+        - nmap
+        - sshuttle
+        - tmux
+
+    - name: Create /opt/windows-extras if it does not exist
+      ansible.builtin.file:
+        path: /opt/windows-extras
+        state: directory
+        mode: '0755'
+
+    - name: Download tightvnc
+      get_url:
+        url: http://www.tightvnc.com/download/1.3.10/tightvnc-1.3.10_x86.zip
+        dest: /opt/windows-extras
+
+    - name: Download Sysinternals Suite
+      get_url:
+        url: https://download.sysinternals.com/files/SysinternalsSuite.zip
+        dest: /opt/windows-extras
+
+#works, commenting out for speed
+#    - name: get aquatone
+#      git:
+#        repo: https://github.com/michenriksen/aquatone
+#        dest: /opt/aquatone
+#        update: yes
+#    - name: get lazyrecon
+#      git:
+#        repo: https://github.com/nahamsec/lazyrecon
+#        dest: /opt/lazyrecon
+#        update: yes
