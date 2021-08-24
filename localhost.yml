@@ -1,1 +1,7 @@
-
+- name: Test commands
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Test local action
+      command: echo "hello world"
