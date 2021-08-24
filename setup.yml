@@ -1,20 +1,24 @@
---- 
-- hosts: all
-  gather_facts: true
-
+--- #Test localhost connection
+- name: Test commands
+  hosts: localhost
+  connection: local
+  gather_facts: true 
   tasks:
+    - name: Test local action
+      command: echo "hello world"
+      
     - debug:
         msg: "I am connecting to {{ ansible_nodename }} which is running {{ ansible_distribution }} {{ ansible_distribution_version }}"
 
-    - name: Show facts available on the system
-      ansible.builtin.debug:
-        var: ansible_facts
+#    - name: Show facts available on the system
+#      ansible.builtin.debug:
+#        var: ansible_facts
         
-    - name: get aquatone
-      git:
-        repo: https://github.com/michenriksen/aquatone
-        dest: /opt/aquatone
-        update: yes        
+ #   - name: get aquatone
+ #     git:
+ #       repo: https://github.com/michenriksen/aquatone
+ #       dest: /opt/aquatone
+ #       update: yes        
         
 
 #  roles:
