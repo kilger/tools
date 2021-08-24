@@ -9,6 +9,13 @@
     - name: Show facts available on the system
       ansible.builtin.debug:
         var: ansible_facts
+        
+    - name: get aquatone
+      git:
+        repo: https://github.com/michenriksen/aquatone
+        dest: /opt/aquatone
+        update: yes        
+        
 
 #  roles:
 #    - test_role
