@@ -1,3 +1,4 @@
+--- #Test localhost connection
 - name: Test commands
   hosts: localhost
   connection: local
@@ -5,3 +6,4 @@
   tasks:
     - name: Test local action
       command: echo "hello world"
+...
