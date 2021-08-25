@@ -607,14 +607,14 @@
         update: yes
     - name: get winPEAS
       git:
-        repo: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS
+        repo: https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS
         dest: /opt/winPEAS
         update: yes
-    - name: get Wordlists
-      git:
-        repo: https://github.com/ZephrFish/Wordlists
-        dest: /opt/Wordlists
-        update: yes
+#    - name: get Wordlists ZephrFish
+#      git:
+#        repo: https://github.com/ZephrFish/Wordlists
+#        dest: /usr/share/wordlists
+#        update: yes
 #- name: get wpscan (requires `gem install bundler && bundle install`)
 #  git:
 #    repo: https://github.com/wpscanteam/wpscan
