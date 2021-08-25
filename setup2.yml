@@ -15,9 +15,11 @@
        pkg:
         - docker.io
         - docker-compose
+        - kali-linux-all
         - nmap
         - sshuttle
         - tmux
+        - ufw
 
     - name: Create /opt/windows-extras if it does not exist
       ansible.builtin.file:
@@ -34,6 +36,24 @@
       get_url:
         url: https://download.sysinternals.com/files/SysinternalsSuite.zip
         dest: /opt/windows-extras
+
+    - name: Create /opt/firefox-old if it does not exist
+      ansible.builtin.file:
+        path: /opt/firefox-old
+        state: directory
+        mode: '0755'
+    - name: Download firefox-old for weak SSL ciphers
+      get_url:
+        url: https://download-installer.cdn.mozilla.net/pub/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
+        dest: /opt/firefox-old
+    
+    - name: Create /usr/share/wordlists if it does not exist
+      ansible.builtin.file:
+        path: /usr/share/wordlists
+        state: directory
+        mode: '0755'
+
+
 
 #works, commenting out for speed
 #    - name: get aquatone
