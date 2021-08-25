@@ -15,11 +15,54 @@
        pkg:
         - docker.io
         - docker-compose
-        - kali-linux-all
+#        - kali-linux-all #fails no package
+        - kali-win-kex
         - nmap
         - sshuttle
         - tmux
         - ufw
+
+#sudo_rights in git centos_sudo-rights-arnold_setup
+    - name: Add sudo rights for deployment user.
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: '^linus'
+        line: 'linus ALL=(ALL) NOPASSWD: ALL #Managd by Ansible'
+        state: present
+        validate: 'visudo -cf %s'
+
+
+
+    - name: Create default_keys directory if it does not exist
+      become: true
+      ansible.builtin.file:
+        path: /etc/ssh/default_keys
+        state: directory
+        mode: '0755'
+
+    - name: Backup default SSH keys file 
+      become: true
+      ansible.builtin.copy:
+        #src: /etc/ssh/ssh_host_*.* 
+        src: /etc/ssh/          
+        dest: /etc/ssh/default_keys    
+
+
+
+    - name: Set permission on linus home folder
+      ansible.builtin.file:
+        path: /home/linus
+        owner: linus
+#    group: linus
+        mode: '0700'
+
+    - name: Set permission on kali home folder
+      ansible.builtin.file:
+        path: /home/kali
+        owner: kali
+        group: kali
+        mode: '0700'
+
 
     - name: Create /opt/windows-extras if it does not exist
       ansible.builtin.file:
@@ -47,13 +90,36 @@
         url: https://download-installer.cdn.mozilla.net/pub/firefox/releases/30.0/linux-x86_64/en-US/firefox-30.0.tar.bz2
         dest: /opt/firefox-old
     
+    - name: Create /opt/firefox-addons if it does not exist
+      ansible.builtin.file:
+        path: /opt/firefox-addons
+        state: directory
+        mode: '0755'
+    - name: Download   
+      get_url:
+        url: https://addons.mozilla.org/firefox/downloads/latest/1154/addon-1154-latest.xpi
+        dest: /opt/firefox-addons
+#https://addons.mozilla.org/firefox/downloads/latest/216803/addon-216803-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/9780/addon-9780-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/953/addon-953-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/file/308568/foxyproxy_standard-4.5.4-sm+tb+fx.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/1843/addon-1843-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/92079/addon-92079-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/462/addon-462-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/3899/addon-3899-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/966/addon-966-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/file/82987/quickjava-1.7.2-fx.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/1800/addon-1800-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/355807/addon-355807-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/410578/addon-410578-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/262804/addon-262804-latest.xpi
+#https://addons.mozilla.org/firefox/downloads/latest/300254/addon-300254-latest.xpi
+
     - name: Create /usr/share/wordlists if it does not exist
       ansible.builtin.file:
         path: /usr/share/wordlists
         state: directory
         mode: '0755'
-
-
 
 #works, commenting out for speed
 #    - name: get aquatone
