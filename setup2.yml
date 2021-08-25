@@ -15,6 +15,8 @@
        pkg:
         - docker.io
         - docker-compose
+        - iptables
+        - iptables-persistent
 #        - kali-linux-all #fails no package
         - kali-win-kex
         - nmap
@@ -22,7 +24,24 @@
         - tmux
         - ufw
 
-#sudo_rights in git centos_sudo-rights-arnold_setup
+    - hosts: kali-03
+      become: yes
+      tasks:
+    - name: Update Hostname on Kali
+        lineinfile:
+        path: /etc/hosts
+        state: present
+        regexp: '^%127.0.1.1 kali-03'
+        backup: yes #may need to remove
+        line: '%127.0.1.1'
+     - name: Set Hostname
+       command: 'hostnamectl set-hostname kali-03'
+     - name: Reboot system
+       command: 'reboot'
+
+
+
+
     - name: Add sudo rights for deployment user.
       lineinfile:
         dest: /etc/sudoers
@@ -31,7 +50,21 @@
         state: present
         validate: 'visudo -cf %s'
 
+    - name: Debian Remove no password from Admin group 
+      lineinfile:
+        path: /etc/sudoers
+        state: present
+        regexp: '^%ADMIN ALL='
+        line: '%ADMIN ALL=(ALL) NOPASSWD: ALL'
+        validate: /usr/sbin/visudo -cf %s
 
+    - name: Disable Root Access via TTY
+      lineinfile:
+        backup: yes
+        create: yes
+        path: /etc/securetty
+        state: present
+        line: ' /dev/null'
 
     - name: Create default_keys directory if it does not exist
       become: true
